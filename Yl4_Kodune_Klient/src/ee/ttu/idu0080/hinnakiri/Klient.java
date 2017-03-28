@@ -44,12 +44,13 @@ public final class Klient {
 		for (String maxHind : maxhinnad) {
 			boolean connected = false;
 			while (!connected && i < 10) {
-				connected = true;
 				i++;
 				try {
 					HinnakiriService_Service service = new HinnakiriService_Service(
 							wsdlURL);
 					HinnakiriService port = service.getHinnakiriPort();
+
+					connected = true;
 		
 					response = port.getHinnakiri(maxHind);
 					
@@ -62,7 +63,6 @@ public final class Klient {
 				} catch(HinnakiriDecimalNumberFormatException e) {
 					System.out.println("Hind ei tohi olla rohkema kui kahe koma kohaga: " + e);
 				} catch(Exception e) {
-					connected = false;
 					System.out.println("Üldine viga:" + i);
 					Thread.sleep(2000);
 				}
@@ -72,8 +72,10 @@ public final class Klient {
 		
 		
 
-		if(response == null)
+		if(response == null) {
+			System.out.println("Serveriga ei õnnestunud ühenduda!");
 			return;
+		}
 
 		printToConsole(response.getHinnakiri());
 	}
